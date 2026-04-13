@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOVA — Local AI powered by Qween</title>
+  <title>NOVA: Local AI powered by Qween</title>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -178,12 +178,72 @@
       animation: pulse-glow 2s ease-in-out infinite;
     }
 
-    /* ── Flicker on NOVA title ── */
+    /* ── Flicker on NOVA title (smooth fade-based) ── */
     @keyframes flicker {
-      0%,19%,21%,23%,25%,54%,56%,100% { opacity: 1; }
-      20%,24%,55% { opacity: 0.7; }
+      0%,   18%,  22%,  26%,  53%,  57%,  100% { opacity: 1; filter: drop-shadow(0 0 22px rgba(0,212,255,0.55)); }
+      20%,  24%,  55% { opacity: 0.82; filter: drop-shadow(0 0 10px rgba(0,212,255,0.25)); }
     }
-    .flicker { animation: flicker 6s linear infinite; }
+    .flicker { animation: flicker 7s ease-in-out infinite; }
+
+    /* ── Floating glow blobs ── */
+    @keyframes float-a {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%       { transform: translate(30px, -40px) scale(1.07); }
+      66%       { transform: translate(-20px, 20px) scale(0.95); }
+    }
+    @keyframes float-b {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      40%       { transform: translate(-35px, 30px) scale(1.08); }
+      70%       { transform: translate(25px, -25px) scale(0.94); }
+    }
+    .blob-a { animation: float-a 14s ease-in-out infinite; }
+    .blob-b { animation: float-b 18s ease-in-out infinite; }
+
+    /* ── Hero entrance animations ── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up {
+      animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.25s; }
+    .delay-3 { animation-delay: 0.42s; }
+    .delay-4 { animation-delay: 0.58s; }
+    .delay-5 { animation-delay: 0.72s; }
+
+    /* ── Scroll-reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Smoother button transitions ── */
+    .btn-primary {
+      transition: opacity 0.3s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.3s cubic-bezier(0.22,1,0.36,1),
+                  box-shadow 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .btn-primary:hover { will-change: transform, box-shadow; }
+    .btn-secondary {
+      transition: background 0.3s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.3s cubic-bezier(0.22,1,0.36,1),
+                  box-shadow 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .btn-secondary:hover { will-change: transform, box-shadow; }
+
+    /* ── Smoother card hover ── */
+    .glass {
+      transition: border-color 0.35s cubic-bezier(0.22,1,0.36,1),
+                  box-shadow 0.35s cubic-bezier(0.22,1,0.36,1);
+    }
 
     /* ── Content above fixed backgrounds ── */
     .above-bg { position: relative; z-index: 10; }
@@ -194,8 +254,8 @@
   <!-- ── Fixed backgrounds ── -->
   <div class="grid-bg"></div>
   <div class="scanlines"></div>
-  <div class="glow-blob w-96 h-96" style="background:#00d4ff; top:-80px; left:-80px;"></div>
-  <div class="glow-blob w-96 h-96" style="background:#9d50bb; bottom:10%; right:-60px;"></div>
+  <div class="glow-blob blob-a w-96 h-96" style="background:#00d4ff; top:-80px; left:-80px;"></div>
+  <div class="glow-blob blob-b w-96 h-96" style="background:#9d50bb; bottom:10%; right:-60px;"></div>
 
   <!-- ══════════════════════════════════════════
        NAV
@@ -236,26 +296,26 @@
   ══════════════════════════════════════════ -->
   <section id="hero" class="above-bg min-h-screen flex flex-col items-center justify-center text-center px-6 py-24">
     <!-- Status badge -->
-    <div class="flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-10 text-xs text-slate-300">
+    <div class="fade-in-up delay-1 flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-10 text-xs text-slate-300">
       <span class="w-2 h-2 rounded-full bg-[#00d4ff] pulse-dot inline-block"></span>
       OFFLINE-FIRST &nbsp;·&nbsp; RASPBERRY PI 5 &nbsp;·&nbsp; VOICE AI
     </div>
 
     <!-- NOVA title -->
-    <h1 class="nova-title flicker text-[clamp(5rem,20vw,14rem)] neon-mix mb-6 select-none">
+    <h1 class="fade-in-up delay-2 nova-title flicker text-[clamp(5rem,20vw,14rem)] neon-mix mb-6 select-none">
       NOVA
     </h1>
 
     <!-- Subtitle -->
-    <p class="text-[clamp(1rem,3vw,1.5rem)] text-slate-300 font-light tracking-wider mb-4">
+    <p class="fade-in-up delay-3 text-[clamp(1rem,3vw,1.5rem)] text-slate-300 font-light tracking-wider mb-4">
       Local AI powered by <span class="neon-violet font-semibold">Qween</span>
     </p>
-    <p class="max-w-xl text-slate-500 text-sm leading-relaxed mb-12">
-      A cinematic, voice-first AI assistant running entirely on-device — inspired by Jarvis, built for the real world.
+    <p class="fade-in-up delay-4 max-w-xl text-slate-500 text-sm leading-relaxed mb-12">
+      A cinematic, voice-first AI assistant running entirely on-device, inspired by Jarvis and built for the real world.
     </p>
 
     <!-- CTA buttons -->
-    <div class="flex flex-wrap items-center justify-center gap-4">
+    <div class="fade-in-up delay-5 flex flex-wrap items-center justify-center gap-4">
       <a
         href="https://github.com/ZydroHub/NOVA"
         target="_blank"
@@ -294,24 +354,24 @@
        OVERVIEW
   ══════════════════════════════════════════ -->
   <section id="overview" class="above-bg max-w-5xl mx-auto px-6 py-24">
-    <div class="flex items-center gap-3 mb-4">
+    <div class="reveal flex items-center gap-3 mb-4">
       <span class="w-1.5 h-7 rounded-full" style="background:linear-gradient(180deg,#00d4ff,#9d50bb)"></span>
       <span class="text-xs tracking-[0.3em] text-slate-500 uppercase">What is NOVA?</span>
     </div>
-    <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-white mb-6">
+    <h2 class="reveal font-orbitron text-3xl md:text-4xl font-bold text-white mb-6">
       Project <span class="neon-cyan">Overview</span>
     </h2>
-    <p class="text-slate-400 text-base leading-relaxed max-w-3xl mb-14">
+    <p class="reveal text-slate-400 text-base leading-relaxed max-w-3xl mb-14">
       NOVA is a <span class="text-white font-medium">desktop-based, voice-first AI assistant</span> running
       entirely on a <span class="neon-cyan font-medium">Raspberry Pi 5 8 GB</span>. It delivers a fast,
-      responsive, and visually cinematic experience — fully <span class="text-white font-medium">offline</span>
+      responsive, and visually cinematic experience, fully <span class="text-white font-medium">offline</span>
       and capable of controlling personal devices without any cloud dependency.
     </p>
 
     <!-- Goal cards grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
 
-      <div class="glass rounded-2xl p-6 flex flex-col gap-3 hover:border-[#00d4ff]/30 transition-colors">
+      <div class="reveal glass rounded-2xl p-6 flex flex-col gap-3 hover:border-[#00d4ff]/30 transition-colors">
         <span class="icon-ring w-11 h-11 rounded-xl flex items-center justify-center">
           <i class="fa-solid fa-microphone-lines neon-cyan text-lg"></i>
         </span>
@@ -321,27 +381,27 @@
         </p>
       </div>
 
-      <div class="glass rounded-2xl p-6 flex flex-col gap-3 hover:border-[#9d50bb]/30 transition-colors">
+      <div class="reveal glass rounded-2xl p-6 flex flex-col gap-3 hover:border-[#9d50bb]/30 transition-colors">
         <span class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(157,80,187,0.1);border:1px solid rgba(157,80,187,0.22);">
           <i class="fa-solid fa-wifi-slash" style="color:#9d50bb; font-size:1.1rem;"></i>
         </span>
         <h3 class="font-semibold text-white">Fully Offline</h3>
         <p class="text-slate-400 text-sm leading-relaxed">
-          Modular offline-first design. No cloud, no subscription — your data stays on device.
+          Modular offline-first design. No cloud, no subscription. Your data stays on device.
         </p>
       </div>
 
-      <div class="glass rounded-2xl p-6 flex flex-col gap-3 hover:border-[#00d4ff]/30 transition-colors">
+      <div class="reveal glass rounded-2xl p-6 flex flex-col gap-3 hover:border-[#00d4ff]/30 transition-colors">
         <span class="icon-ring w-11 h-11 rounded-xl flex items-center justify-center">
           <i class="fa-solid fa-film neon-cyan text-lg"></i>
         </span>
         <h3 class="font-semibold text-white">Cinematic UI</h3>
         <p class="text-slate-400 text-sm leading-relaxed">
-          Animated display with dynamic text streaming and subtle idle animations — Jarvis-grade experience.
+          Animated display with dynamic text streaming and subtle idle animations for a Jarvis-grade experience.
         </p>
       </div>
 
-      <div class="glass rounded-2xl p-6 flex flex-col gap-3 hover:border-[#9d50bb]/30 transition-colors">
+      <div class="reveal glass rounded-2xl p-6 flex flex-col gap-3 hover:border-[#9d50bb]/30 transition-colors">
         <span class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(157,80,187,0.1);border:1px solid rgba(157,80,187,0.22);">
           <i class="fa-solid fa-puzzle-piece" style="color:#9d50bb; font-size:1.1rem;"></i>
         </span>
@@ -351,23 +411,23 @@
         </p>
       </div>
 
-      <div class="glass rounded-2xl p-6 flex flex-col gap-3 hover:border-[#00d4ff]/30 transition-colors">
+      <div class="reveal glass rounded-2xl p-6 flex flex-col gap-3 hover:border-[#00d4ff]/30 transition-colors">
         <span class="icon-ring w-11 h-11 rounded-xl flex items-center justify-center">
           <i class="fa-solid fa-brain neon-cyan text-lg"></i>
         </span>
         <h3 class="font-semibold text-white">Multi-Category Knowledge</h3>
         <p class="text-slate-400 text-sm leading-relaxed">
-          News, calendar, weather, music, smart-home — all accessible via natural voice commands.
+          News, calendar, weather, music, smart-home. All accessible via natural voice commands.
         </p>
       </div>
 
-      <div class="glass rounded-2xl p-6 flex flex-col gap-3 hover:border-[#9d50bb]/30 transition-colors">
+      <div class="reveal glass rounded-2xl p-6 flex flex-col gap-3 hover:border-[#9d50bb]/30 transition-colors">
         <span class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(157,80,187,0.1);border:1px solid rgba(157,80,187,0.22);">
           <i class="fa-brands fa-raspberry-pi" style="color:#9d50bb; font-size:1.1rem;"></i>
         </span>
         <h3 class="font-semibold text-white">Raspberry Pi 5 Native</h3>
         <p class="text-slate-400 text-sm leading-relaxed">
-          Optimized for Raspberry Pi 5 8 GB — efficient LLM, STT, and TTS models purpose-built for the hardware.
+          Optimized for Raspberry Pi 5 8 GB with efficient LLM, STT, and TTS models purpose-built for the hardware.
         </p>
       </div>
 
@@ -385,18 +445,18 @@
        FEATURES
   ══════════════════════════════════════════ -->
   <section id="features" class="above-bg max-w-5xl mx-auto px-6 py-24">
-    <div class="flex items-center gap-3 mb-4">
+    <div class="reveal flex items-center gap-3 mb-4">
       <span class="w-1.5 h-7 rounded-full" style="background:linear-gradient(180deg,#00d4ff,#9d50bb)"></span>
       <span class="text-xs tracking-[0.3em] text-slate-500 uppercase">Core Capabilities</span>
     </div>
-    <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-white mb-12">
+    <h2 class="reveal font-orbitron text-3xl md:text-4xl font-bold text-white mb-12">
       Feature <span class="neon-cyan">Highlights</span>
     </h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
       <!-- Feature row -->
-      <div class="glass rounded-2xl p-6 flex items-start gap-5">
+      <div class="reveal glass rounded-2xl p-6 flex items-start gap-5">
         <div class="icon-ring w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center">
           <i class="fa-solid fa-waveform-lines neon-cyan text-xl"></i>
         </div>
@@ -406,17 +466,17 @@
         </div>
       </div>
 
-      <div class="glass rounded-2xl p-6 flex items-start gap-5">
+      <div class="reveal glass rounded-2xl p-6 flex items-start gap-5">
         <div class="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:rgba(157,80,187,0.1);border:1px solid rgba(157,80,187,0.22);">
           <i class="fa-solid fa-robot" style="color:#9d50bb; font-size:1.25rem;"></i>
         </div>
         <div>
           <h4 class="font-semibold text-white mb-1">Offline LLM Inference</h4>
-          <p class="text-slate-400 text-sm leading-relaxed">Runs quantised language models directly on-device — no API calls, no latency spikes, full privacy.</p>
+          <p class="text-slate-400 text-sm leading-relaxed">Runs quantised language models directly on-device. No API calls, no latency spikes, full privacy.</p>
         </div>
       </div>
 
-      <div class="glass rounded-2xl p-6 flex items-start gap-5">
+      <div class="reveal glass rounded-2xl p-6 flex items-start gap-5">
         <div class="icon-ring w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center">
           <i class="fa-solid fa-calendar-days neon-cyan text-xl"></i>
         </div>
@@ -426,7 +486,7 @@
         </div>
       </div>
 
-      <div class="glass rounded-2xl p-6 flex items-start gap-5">
+      <div class="reveal glass rounded-2xl p-6 flex items-start gap-5">
         <div class="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:rgba(157,80,187,0.1);border:1px solid rgba(157,80,187,0.22);">
           <i class="fa-solid fa-house-signal" style="color:#9d50bb; font-size:1.25rem;"></i>
         </div>
@@ -436,23 +496,23 @@
         </div>
       </div>
 
-      <div class="glass rounded-2xl p-6 flex items-start gap-5">
+      <div class="reveal glass rounded-2xl p-6 flex items-start gap-5">
         <div class="icon-ring w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center">
           <i class="fa-solid fa-music neon-cyan text-xl"></i>
         </div>
         <div>
           <h4 class="font-semibold text-white mb-1">Music &amp; Media Playback</h4>
-          <p class="text-slate-400 text-sm leading-relaxed">Integrated music category layer — ask NOVA to play, pause, skip, or queue tracks entirely by voice.</p>
+          <p class="text-slate-400 text-sm leading-relaxed">Integrated music category layer. Ask NOVA to play, pause, skip, or queue tracks entirely by voice.</p>
         </div>
       </div>
 
-      <div class="glass rounded-2xl p-6 flex items-start gap-5">
+      <div class="reveal glass rounded-2xl p-6 flex items-start gap-5">
         <div class="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:rgba(157,80,187,0.1);border:1px solid rgba(157,80,187,0.22);">
           <i class="fa-solid fa-cloud-sun" style="color:#9d50bb; font-size:1.25rem;"></i>
         </div>
         <div>
           <h4 class="font-semibold text-white mb-1">Weather &amp; News</h4>
-          <p class="text-slate-400 text-sm leading-relaxed">Background scheduler fetches weather data and news digests, ready to brief you on demand — no internet required at query time.</p>
+          <p class="text-slate-400 text-sm leading-relaxed">Background scheduler fetches weather data and news digests, ready to brief you on demand. No internet required at query time.</p>
         </div>
       </div>
 
@@ -470,18 +530,18 @@
        ARCHITECTURE / COMPONENTS
   ══════════════════════════════════════════ -->
   <section id="components" class="above-bg max-w-5xl mx-auto px-6 py-24">
-    <div class="flex items-center gap-3 mb-4">
+    <div class="reveal flex items-center gap-3 mb-4">
       <span class="w-1.5 h-7 rounded-full" style="background:linear-gradient(180deg,#00d4ff,#9d50bb)"></span>
       <span class="text-xs tracking-[0.3em] text-slate-500 uppercase">Under the Hood</span>
     </div>
-    <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-white mb-12">
+    <h2 class="reveal font-orbitron text-3xl md:text-4xl font-bold text-white mb-12">
       Core <span class="neon-cyan">Architecture</span>
     </h2>
 
     <!-- Component cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
-      <div class="comp-badge rounded-2xl p-5 flex flex-col gap-2">
+      <div class="reveal comp-badge rounded-2xl p-5 flex flex-col gap-2">
         <div class="flex items-center gap-2.5 mb-1">
           <i class="fa-solid fa-comments neon-cyan text-base"></i>
           <span class="font-semibold text-white text-sm">Conversation Manager</span>
@@ -489,7 +549,7 @@
         <p class="text-slate-400 text-xs leading-relaxed">Handles context, intent routing, response streaming, and mid-sentence interruptions.</p>
       </div>
 
-      <div class="comp-badge rounded-2xl p-5 flex flex-col gap-2">
+      <div class="reveal comp-badge rounded-2xl p-5 flex flex-col gap-2">
         <div class="flex items-center gap-2.5 mb-1">
           <i class="fa-solid fa-layer-group text-base" style="color:#9d50bb;"></i>
           <span class="font-semibold text-white text-sm">Category Layer</span>
@@ -497,7 +557,7 @@
         <p class="text-slate-400 text-xs leading-relaxed">Manages knowledge sources: News, Calendar, Weather, Music, and Home Screen.</p>
       </div>
 
-      <div class="comp-badge rounded-2xl p-5 flex flex-col gap-2">
+      <div class="reveal comp-badge rounded-2xl p-5 flex flex-col gap-2">
         <div class="flex items-center gap-2.5 mb-1">
           <i class="fa-solid fa-clock-rotate-left neon-cyan text-base"></i>
           <span class="font-semibold text-white text-sm">Scheduler / Fetcher</span>
@@ -505,7 +565,7 @@
         <p class="text-slate-400 text-xs leading-relaxed">Background task engine for news updates, data refresh, and timed reminders.</p>
       </div>
 
-      <div class="comp-badge rounded-2xl p-5 flex flex-col gap-2">
+      <div class="reveal comp-badge rounded-2xl p-5 flex flex-col gap-2">
         <div class="flex items-center gap-2.5 mb-1">
           <i class="fa-solid fa-display" style="color:#9d50bb;"></i>
           <span class="font-semibold text-white text-sm">UI Manager</span>
@@ -513,7 +573,7 @@
         <p class="text-slate-400 text-xs leading-relaxed">Controls the screen: animations, text streaming, and real-time status indicators.</p>
       </div>
 
-      <div class="comp-badge rounded-2xl p-5 flex flex-col gap-2">
+      <div class="reveal comp-badge rounded-2xl p-5 flex flex-col gap-2">
         <div class="flex items-center gap-2.5 mb-1">
           <i class="fa-solid fa-volume-high neon-cyan text-base"></i>
           <span class="font-semibold text-white text-sm">Audio Manager</span>
@@ -521,18 +581,18 @@
         <p class="text-slate-400 text-xs leading-relaxed">Handles input capture, STT, TTS, audio streaming pipelines, and interruption signals.</p>
       </div>
 
-      <div class="comp-badge rounded-2xl p-5 flex flex-col gap-2">
+      <div class="reveal comp-badge rounded-2xl p-5 flex flex-col gap-2">
         <div class="flex items-center gap-2.5 mb-1">
           <i class="fa-solid fa-microchip" style="color:#9d50bb;"></i>
           <span class="font-semibold text-white text-sm">Models Layer</span>
         </div>
-        <p class="text-slate-400 text-xs leading-relaxed">LLM, STT, TTS, and function-calling models — all offline-optimized for Raspberry Pi 5.</p>
+        <p class="text-slate-400 text-xs leading-relaxed">LLM, STT, TTS, and function-calling models, all offline-optimized for Raspberry Pi 5.</p>
       </div>
 
     </div>
 
     <!-- Stack pills -->
-    <div class="mt-12 flex flex-wrap gap-3">
+    <div class="reveal mt-12 flex flex-wrap gap-3">
       <span class="glass rounded-full px-4 py-1.5 text-xs text-slate-300 flex items-center gap-1.5">
         <i class="fa-brands fa-python neon-cyan text-xs"></i> Python
       </span>
@@ -562,15 +622,15 @@
        DEVELOPER IDENTITY
   ══════════════════════════════════════════ -->
   <section id="developer" class="above-bg max-w-5xl mx-auto px-6 py-24">
-    <div class="flex items-center gap-3 mb-4">
+    <div class="reveal flex items-center gap-3 mb-4">
       <span class="w-1.5 h-7 rounded-full" style="background:linear-gradient(180deg,#00d4ff,#9d50bb)"></span>
       <span class="text-xs tracking-[0.3em] text-slate-500 uppercase">The Creator</span>
     </div>
-    <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-white mb-10">
+    <h2 class="reveal font-orbitron text-3xl md:text-4xl font-bold text-white mb-10">
       Developer <span class="neon-cyan">Identity</span>
     </h2>
 
-    <div class="glass rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center gap-8">
+    <div class="reveal glass rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center gap-8">
       <!-- Avatar placeholder -->
       <div class="flex-shrink-0">
         <div class="w-20 h-20 rounded-2xl flex items-center justify-center relative" style="background:linear-gradient(135deg,rgba(0,212,255,0.15),rgba(157,80,187,0.15));border:1px solid rgba(0,212,255,0.25);">
@@ -590,7 +650,7 @@
           </span>
         </div>
         <p class="text-slate-400 text-sm leading-relaxed mb-5 max-w-2xl">
-          NOVA is a <span class="text-white font-medium">ZydroHub</span> project — built by a passionate developer and gamer
+          NOVA is a <span class="text-white font-medium">ZydroHub</span> project, built by a passionate developer and gamer
           who believes cutting-edge AI shouldn't live in the cloud. Every component is crafted to run
           efficiently on local hardware, proving that <span class="neon-cyan font-medium">powerful AI experiences</span> are
           achievable without a datacenter.
@@ -644,6 +704,24 @@
       </div>
     </div>
   </footer>
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const siblings = Array.from(el.parentElement.querySelectorAll('.reveal'));
+            const idx = siblings.indexOf(el);
+            el.style.transitionDelay = (idx * 0.07) + 's';
+            el.classList.add('visible');
+            observer.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
 
 </body>
 </html>
